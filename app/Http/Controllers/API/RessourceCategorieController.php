@@ -27,7 +27,7 @@ class RessourceCategorieController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Liste des catégories de ressource récupérée avec succès',
+            'message' => 'Liste des catégories de article récupérée avec succès',
             'data' => $ressourceCategories
         ], 200);
     }
@@ -46,7 +46,7 @@ class RessourceCategorieController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Catégorie de ressource ajoutée avec succès',
+            'message' => 'Catégorie de article ajoutée avec succès',
             'data' => $ressourceCategorie
         ], 201);
     }
@@ -58,7 +58,7 @@ class RessourceCategorieController extends Controller
     {
         return response()->json([
             'status' => true,
-            'message' => 'Catégorie de ressource trouvée avec succès',
+            'message' => 'Catégorie de article trouvée avec succès',
             'data' => $ressourceCategorie
         ], 200);
     }
@@ -77,12 +77,12 @@ class RessourceCategorieController extends Controller
                 'visible' => 'required|boolean',
             ]);
 
-            // Mise à jour de la ressource
+            // Mise à jour de la article
             $ressourceCategorie->update($validated);
 
             return response()->json([
                 'status' => true,
-                'message' => 'Catégorie de ressource modifiée avec succès',
+                'message' => 'Catégorie de article modifiée avec succès',
                 'data' => $ressourceCategorie
             ], 200);
         }
@@ -93,13 +93,13 @@ class RessourceCategorieController extends Controller
      */
     public function destroy($id)
     {
-        // Vérifier si ressource utilise cette catégorie
+        // Vérifier si article utilise cette catégorie
         $ressourceCategorie = RessourceCategorie::find($id);
         if ($ressourceCategorie) {
             if ($ressourceCategorie->ressources()->exists()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Cette catégorie ne peut être supprimée : elle est utilisée par une ressource.'
+                    'message' => 'Cette catégorie ne peut être supprimée : elle est utilisée par une article.'
                 ], 400);
             } else {
                 $ressourceCategorie->delete();
@@ -108,7 +108,7 @@ class RessourceCategorieController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Catégorie de ressource supprimée avec succès'
+            'message' => 'Catégorie de article supprimée avec succès'
         ], 200);
     }
 }
