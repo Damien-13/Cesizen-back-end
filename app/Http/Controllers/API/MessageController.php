@@ -48,7 +48,7 @@ class MessageController extends Controller
      */
     public function show(Message $message)
     {
-        $message->load(['user', 'ressource', 'reponses']);
+        $message->load(['user', 'article', 'reponses']);
 
         return response()->json([
             'status' => true,
