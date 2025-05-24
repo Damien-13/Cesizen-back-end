@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ressource;
+use App\Models\article;
 use App\Models\RessourcePartage;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class RessourceController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Ressource::with(['user', 'ressourceType', 'ressourceCategorie', 'relationType'])
+        $query = article::with(['user', 'ressourceType', 'ressourceCategorie', 'relationType'])
             ->orderBy('created_at', 'desc');
 
         // Filtre optionnel : "valide"
@@ -80,33 +80,33 @@ class RessourceController extends Controller
             'relation_type_id' => 'required|exists:relation_types,id'
         ]);
 
-        $ressource = Ressource::create($validated);
+        $article = article::create($validated);
 
         return response()->json([
             'status' => true,
-            'message' => 'Ressource ajoutée avec succès',
-            'data' => $ressource
+            'message' => 'article ajoutée avec succès',
+            'data' => $article
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Ressource $ressource)
+    public function show(article $article)
     {
-        $ressource->load(['user', 'ressourceType', 'ressourceCategorie', 'relationType']);
+        $article->load(['user', 'ressourceType', 'ressourceCategorie', 'relationType']);
 
         return response()->json([
             'status' => true,
-            'message' => 'Ressource trouvée avec succès',
-            'data' => $ressource
+            'message' => 'article trouvée avec succès',
+            'data' => $article
         ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ressource $ressource)
+    public function update(Request $request, article $article)
     {
         $validated = $request->validate([
             'titre' => 'required|string|max:100',
@@ -121,25 +121,25 @@ class RessourceController extends Controller
             'relation_type_id' => 'required|exists:relation_types,id'
         ]);
 
-        $ressource->update($validated);
+        $article->update($validated);
 
         return response()->json([
             'status' => true,
-            'message' => 'Ressource modifiée avec succès',
-            'data' => $ressource
+            'message' => 'article modifiée avec succès',
+            'data' => $article
         ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ressource $ressource)
+    public function destroy(article $article)
     {
-        $ressource->delete();
+        $article->delete();
 
         return response()->json([
             'status' => true,
-            'message' => 'Ressource supprimée avec succès'
+            'message' => 'article supprimée avec succès'
         ], 200);
     }
 }
