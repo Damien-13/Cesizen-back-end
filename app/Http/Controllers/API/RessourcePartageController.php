@@ -14,7 +14,7 @@ class RessourcePartageController extends Controller
      */
     public function index(Request $request)
     {
-        $query = RessourcePartage::with(['destinataire', 'ressource'])
+        $query = RessourcePartage::with(['destinataire', 'article'])
             ->join('users', 'ressource_partages.user_id', '=', 'users.id')
             ->where('users.actif', 1)
             ->orderBy('users.nom')
@@ -94,7 +94,7 @@ class RessourcePartageController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Partage de ressource supprimé avec succès'
+            'message' => 'Partage de article supprimé avec succès'
         ], 200);
     }
 }

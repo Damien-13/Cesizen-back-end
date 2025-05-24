@@ -17,6 +17,6 @@ class RelationType extends Model
 
     public function ressources(): HasMany
     {
-        return $this->hasMany(Ressource::class);
+        return $this->hasMany(article::class);
     }
 }

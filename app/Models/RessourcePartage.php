@@ -14,9 +14,9 @@ class RessourcePartage extends Model
         'user_id', //Destinataire du partage
     ];
 
-    public function ressource()
+    public function article()
     {
-        return $this->belongsTo(Ressource::class);
+        return $this->belongsTo(article::class);
     }
 
     public function destinataire()

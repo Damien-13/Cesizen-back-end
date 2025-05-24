@@ -17,7 +17,7 @@ class RessourceTypeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Liste des types de ressource récupérée avec succès',
+            'message' => 'Liste des types de article récupérée avec succès',
             'data' => $ressourceTypes
         ], 200);
     }
@@ -36,7 +36,7 @@ class RessourceTypeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Type de ressource ajouté avec succès',
+            'message' => 'Type de article ajouté avec succès',
             'data' => $ressourcetype
         ], 201);
     }
@@ -48,7 +48,7 @@ class RessourceTypeController extends Controller
     {
         return response()->json([
             'status' => true,
-            'message' => 'Type de ressource trouvé avec succès',
+            'message' => 'Type de article trouvé avec succès',
             'data' => $ressourcetype
         ], 200);
     }
@@ -67,7 +67,7 @@ class RessourceTypeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Type de ressource modifié avec succès',
+            'message' => 'Type de article modifié avec succès',
             'data' => $ressourceType
         ], 200);
     }
@@ -81,7 +81,7 @@ class RessourceTypeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Type de ressource supprimé avec succès'
+            'message' => 'Type de article supprimé avec succès'
         ], 200);
     }
 }
