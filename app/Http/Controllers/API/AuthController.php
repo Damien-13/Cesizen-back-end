@@ -17,12 +17,18 @@ class AuthController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-
+        
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Identifiants invalides'], 401);
         }
-
+       
         $user = Auth::user();
+        
+        // Vérifie si l'utilisateur est actif
+         if (!$user->actif) {
+            return response()->json(['message' => 'Compte désactivé'], 403);
+        }
+
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
