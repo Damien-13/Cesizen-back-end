@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class RessourceCategorie extends Model
+class articleCategorie extends Model
 {
     use HasFactory;
     
     protected $fillable = [
-        'lib_ressource_categorie',
+        'lib_article_categorie',
         'visible'
     ];
 

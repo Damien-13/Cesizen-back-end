@@ -3,35 +3,35 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\RessourcePartage;
+use App\Models\articlePartage;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class RessourcePartageController extends Controller
+class articlePartageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $query = RessourcePartage::with(['destinataire', 'article'])
-            ->join('users', 'ressource_partages.user_id', '=', 'users.id')
+        $query = articlePartage::with(['destinataire', 'article'])
+            ->join('users', 'article_partages.user_id', '=', 'users.id')
             ->where('users.actif', 1)
             ->orderBy('users.nom')
             ->orderBy('users.prenom')
             ->orderBy('users.email')
-            ->select('ressource_partages.*');
+            ->select('article_partages.*');
 
-        if ($request->has('ressource_id')) {
-            $query->where('ressource_id', $request->query('ressource_id'));
+        if ($request->has('article_id')) {
+            $query->where('article_id', $request->query('article_id'));
         }
 
-        $ressourcePartages = $query->get();
+        $articlePartages = $query->get();
 
         return response()->json([
             'status' => true,
-            'message' => 'Liste des ressources récupérée avec succès',
-            'data' => $ressourcePartages
+            'message' => 'Liste des articles récupérée avec succès',
+            'data' => $articlePartages
         ], 200);
     }
 
@@ -41,7 +41,7 @@ class RessourcePartageController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ressource_id' => 'required|exists:ressources,id',
+            'article_id' => 'required|exists:ressources,id',
             'email_destinataire' => 'required|email|exists:users,email',
         ]);
 
@@ -57,22 +57,22 @@ class RessourcePartageController extends Controller
             ], 404);
         }
 
-        $ressourcePartage = RessourcePartage::create([
-            'ressource_id' => $validated['ressource_id'],
+        $articlePartage = articlePartage::create([
+            'article_id' => $validated['article_id'],
             'user_id' => $user->id
         ]);
 
         return response()->json([
             'status' => true,
             'message' => 'Partage de ressouce ajouté avec succès',
-            'data' => $ressourcePartage
+            'data' => $articlePartage
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(RessourcePartage $ressourcePartage)
+    public function show(articlePartage $articlePartage)
     {
         //
     }
@@ -80,7 +80,7 @@ class RessourcePartageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RessourcePartage $ressourcePartage)
+    public function update(Request $request, articlePartage $articlePartage)
     {
         //
     }
@@ -88,9 +88,9 @@ class RessourcePartageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RessourcePartage $ressourcePartage)
+    public function destroy(articlePartage $articlePartage)
     {
-        $ressourcePartage->delete();
+        $articlePartage->delete();
 
         return response()->json([
             'status' => true,

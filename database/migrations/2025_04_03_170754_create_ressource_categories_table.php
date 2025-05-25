@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ressource_categories', function (Blueprint $table) {
+        Schema::create('article_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('lib_ressource_categorie');
+            $table->string('lib_article_categorie');
             $table->boolean('visible');
             $table->timestamps();
         });
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ressource_categories');
+        Schema::dropIfExists('article_categories');
     }
 };

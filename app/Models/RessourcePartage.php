@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RessourcePartage extends Model
+class articlePartage extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'ressource_id',
+        'article_id',
         'user_id', //Destinataire du partage
     ];
 

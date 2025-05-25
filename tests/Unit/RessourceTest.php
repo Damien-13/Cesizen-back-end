@@ -3,49 +3,49 @@
 namespace Tests\Unit;
 
 use App\Models\RelationType;
-use App\Models\Ressource;
-use App\Models\RessourceCategorie;
-use App\Models\RessourceType;
+use App\Models\article;
+use App\Models\articleCategorie;
+use App\Models\articleType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RessourceTest extends TestCase
+class articleTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_ressource_belong_relations(): void
+    public function test_article_belong_relations(): void
     {
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         
         // Arrange
         $user = User::factory()->create();
-        $categorie = RessourceCategorie::factory()->create();
-        $type = RessourceType::factory()->create();
+        $categorie = articleCategorie::factory()->create();
+        $type = articleType::factory()->create();
         $relation = RelationType::factory()->create();
-        $ressource = Ressource::factory()->create([
+        $article = article::factory()->create([
             'user_id' => $user->id,
-            'ressource_categorie_id' => $categorie->id,
-            'ressource_type_id' => $type->id,
+            'article_categorie_id' => $categorie->id,
+            'article_type_id' => $type->id,
             'relation_type_id' => $relation->id,
         ]);
 
         // Act & Assert : vérifier chaque relation
 
         // User
-        $this->assertInstanceOf(User::class, $ressource->user);
-        $this->assertEquals($user->id, $ressource->user->id);
+        $this->assertInstanceOf(User::class, $article->user);
+        $this->assertEquals($user->id, $article->user->id);
 
-        // RessourceCategorie
-        $this->assertInstanceOf(RessourceCategorie::class, $ressource->ressourceCategorie);
-        $this->assertEquals($categorie->id, $ressource->ressourceCategorie->id);
+        // articleCategorie
+        $this->assertInstanceOf(articleCategorie::class, $article->articleCategorie);
+        $this->assertEquals($categorie->id, $article->articleCategorie->id);
 
-        // RessourceType
-        $this->assertInstanceOf(RessourceType::class, $ressource->ressourceType);
-        $this->assertEquals($type->id, $ressource->ressourceType->id);
+        // articleType
+        $this->assertInstanceOf(articleType::class, $article->articleType);
+        $this->assertEquals($type->id, $article->articleType->id);
 
         // RelationType
-        $this->assertInstanceOf(RelationType::class, $ressource->relationType);
-        $this->assertEquals($relation->id, $ressource->relationType->id);
+        $this->assertInstanceOf(RelationType::class, $article->relationType);
+        $this->assertEquals($relation->id, $article->relationType->id);
     }
 }

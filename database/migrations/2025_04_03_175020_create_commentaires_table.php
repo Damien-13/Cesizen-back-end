@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('lib_commentaire');
             $table->boolean('visible');
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('ressource_id')->constrained();
+            $table->foreignId('article_id')->constrained();
 
             //Réponses à un commentaire nullable
             $table->foreignId('parent_id')

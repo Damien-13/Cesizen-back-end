@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\RessourceCategorie;
+use App\Models\articleCategorie;
 use Illuminate\Http\Request;
 
-class RessourceCategorieController extends Controller
+class articleCategorieController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $query = RessourceCategorie::orderBy('lib_ressource_categorie');
+        $query = articleCategorie::orderBy('lib_article_categorie');
 
         //Paramètres optionnels
         if ($request->has('visible')) {
@@ -23,12 +23,12 @@ class RessourceCategorieController extends Controller
             }
         }
 
-        $ressourceCategories = $query->get();
+        $articleCategories = $query->get();
 
         return response()->json([
             'status' => true,
             'message' => 'Liste des catégories de article récupérée avec succès',
-            'data' => $ressourceCategories
+            'data' => $articleCategories
         ], 200);
     }
 
@@ -38,28 +38,28 @@ class RessourceCategorieController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'lib_ressource_categorie' => 'required|string|max:50',
+            'lib_article_categorie' => 'required|string|max:50',
             'visible' => 'required|boolean',
         ]);
 
-        $ressourceCategorie = RessourceCategorie::create($validated);
+        $articleCategorie = articleCategorie::create($validated);
 
         return response()->json([
             'status' => true,
             'message' => 'Catégorie de article ajoutée avec succès',
-            'data' => $ressourceCategorie
+            'data' => $articleCategorie
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(RessourceCategorie $ressourceCategorie)
+    public function show(articleCategorie $articleCategorie)
     {
         return response()->json([
             'status' => true,
             'message' => 'Catégorie de article trouvée avec succès',
-            'data' => $ressourceCategorie
+            'data' => $articleCategorie
         ], 200);
     }
 
@@ -68,22 +68,22 @@ class RessourceCategorieController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $ressourceCategorie = RessourceCategorie::find($id);
+        $articleCategorie = articleCategorie::find($id);
 
-        if ($ressourceCategorie) {
+        if ($articleCategorie) {
             // Validation des données
             $validated = $request->validate([
-                'lib_ressource_categorie' => 'required|string|max:100',
+                'lib_article_categorie' => 'required|string|max:100',
                 'visible' => 'required|boolean',
             ]);
 
             // Mise à jour de la article
-            $ressourceCategorie->update($validated);
+            $articleCategorie->update($validated);
 
             return response()->json([
                 'status' => true,
                 'message' => 'Catégorie de article modifiée avec succès',
-                'data' => $ressourceCategorie
+                'data' => $articleCategorie
             ], 200);
         }
     }
@@ -94,15 +94,15 @@ class RessourceCategorieController extends Controller
     public function destroy($id)
     {
         // Vérifier si article utilise cette catégorie
-        $ressourceCategorie = RessourceCategorie::find($id);
-        if ($ressourceCategorie) {
-            if ($ressourceCategorie->ressources()->exists()) {
+        $articleCategorie = articleCategorie::find($id);
+        if ($articleCategorie) {
+            if ($articleCategorie->articles()->exists()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Cette catégorie ne peut être supprimée : elle est utilisée par une article.'
                 ], 400);
             } else {
-                $ressourceCategorie->delete();
+                $articleCategorie->delete();
             }
         }
 

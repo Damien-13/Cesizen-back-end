@@ -22,8 +22,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreignId('user_id')->constrained()->onDelete('restrict');
-            $table->foreignId('ressource_categorie_id')->constrained()->onDelete('restrict');
-            $table->foreignId('ressource_type_id')->constrained()->onDelete('restrict');
+            $table->foreignId('article_categorie_id')->constrained()->onDelete('restrict');
+            $table->foreignId('article_type_id')->constrained()->onDelete('restrict');
             $table->foreignId('relation_type_id')->constrained()->onDelete('restrict');
         });
     }

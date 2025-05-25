@@ -2,22 +2,22 @@
 
 namespace Tests\Unit;
 
-use App\Models\Ressource;
-use App\Models\RessourceCategorie;
+use App\Models\article;
+use App\Models\articleCategorie;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RessourceCategorieTest extends TestCase
+class articleCategorieTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_ressource_categorie_belongs_to_many_ressources(): void
+    public function test_article_categorie_belongs_to_many_ressources(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
-        $categorie = RessourceCategorie::factory()->create();
-        Ressource::factory()->count(3)->create([
-            'ressource_categorie_id' => $categorie->id,
+        $categorie = articleCategorie::factory()->create();
+        article::factory()->count(3)->create([
+            'article_categorie_id' => $categorie->id,
         ]);
 
         // Act
@@ -25,6 +25,6 @@ class RessourceCategorieTest extends TestCase
 
         // Assert
         $this->assertCount(3, $ressources);
-        $this->assertInstanceOf(Ressource::class, $ressources->first());
+        $this->assertInstanceOf(article::class, $ressources->first());
     }
 }

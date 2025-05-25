@@ -24,10 +24,10 @@ class DatabaseSeeder extends Seeder
             DepartementSeeder::class,
             RolePermissionSeeder::class,
             UserSeeder::class,
-            RessourceTypeSeeder::class,
+            articleTypeSeeder::class,
             RelationTypeSeeder::class,
             CategorieSeeder::class,
-            RessourceSeeder::class
+            articleSeeder::class
         ]);
     }
 }

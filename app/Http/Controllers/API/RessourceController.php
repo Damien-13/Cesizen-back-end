@@ -4,18 +4,18 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\article;
-use App\Models\RessourcePartage;
+use App\Models\articlePartage;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class RessourceController extends Controller
+class articleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $query = article::with(['user', 'ressourceType', 'ressourceCategorie', 'relationType'])
+        $query = article::with(['user', 'articleType', 'articleCategorie', 'relationType'])
             ->orderBy('created_at', 'desc');
 
         // Filtre optionnel : "valide"
@@ -41,8 +41,8 @@ class RessourceController extends Controller
                     // aucun filtre
                 } else {
                     // Utilisateur = publiques + personnelles + partagées
-                    $ressourcesPartageesIds = RessourcePartage::where('user_id', $userId)
-                        ->pluck('ressource_id');
+                    $articlesPartageesIds = articlePartage::where('user_id', $userId)
+                        ->pluck('article_id');
 
                     $query->where(function ($q) use ($userId, $ressourcesPartageesIds) {
                         $q->where('restreint', false)
@@ -53,11 +53,11 @@ class RessourceController extends Controller
             }
         }
 
-        $ressources = $query->get();
+        $articles = $query->get();
 
         return response()->json([
             'status' => true,
-            'message' => 'Liste des ressources récupérée avec succès',
+            'message' => 'Liste des articles récupérée avec succès',
             'data' => $ressources
         ], 200);
     }
@@ -75,8 +75,8 @@ class RessourceController extends Controller
             'url' => 'nullable|string|max:255',
             'valide' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
-            'ressource_categorie_id' => 'required|exists:ressource_categories,id',
-            'ressource_type_id' => 'required|exists:ressource_types,id',
+            'article_categorie_id' => 'required|exists:article_categories,id',
+            'article_type_id' => 'required|exists:article_types,id',
             'relation_type_id' => 'required|exists:relation_types,id'
         ]);
 
@@ -94,7 +94,7 @@ class RessourceController extends Controller
      */
     public function show(article $article)
     {
-        $article->load(['user', 'ressourceType', 'ressourceCategorie', 'relationType']);
+        $article->load(['user', 'articleType', 'articleCategorie', 'relationType']);
 
         return response()->json([
             'status' => true,
@@ -116,8 +116,8 @@ class RessourceController extends Controller
             'url' => 'nullable|string|max:255',
             'valide' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
-            'ressource_categorie_id' => 'required|exists:ressource_categories,id',
-            'ressource_type_id' => 'required|exists:ressource_types,id',
+            'article_categorie_id' => 'required|exists:article_categories,id',
+            'article_type_id' => 'required|exists:article_types,id',
             'relation_type_id' => 'required|exists:relation_types,id'
         ]);
 

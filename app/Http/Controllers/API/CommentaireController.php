@@ -31,7 +31,7 @@ class CommentaireController extends Controller
             'lib_commentaire' => 'required|string|max:500',
             'visible' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
-            'ressource_id' => 'required|exists:ressources,id',
+            'article_id' => 'required|exists:articles,id',
             'parent_id' => 'nullable|exists:commentaires,id',
         ]);
 
@@ -67,7 +67,7 @@ class CommentaireController extends Controller
             'lib_commentaire' => 'required|string|max:500',
             'visible' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
-            'ressource_id' => 'required|exists:ressources,id',
+            'article_id' => 'required|exists:articles,id',
             'parent_id' => 'nullable|exists:commentaires,id',
         ]);
 

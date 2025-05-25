@@ -12,7 +12,7 @@ class Commentaire extends Model
         'lib_commentaire',
         'visible',
         'user_id',
-        'ressource_id',
+        'article_id',
         'parent_id'
     ];
 

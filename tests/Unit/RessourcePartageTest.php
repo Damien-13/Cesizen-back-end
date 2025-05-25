@@ -2,34 +2,34 @@
 
 namespace Tests\Unit;
 
-use App\Models\Ressource;
-use App\Models\RessourcePartage;
+use App\Models\article;
+use App\Models\articlePartage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RessourcePartageTest extends TestCase
+class articlePartageTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_ressource_partage_belongs_to_ressource_and_user(): void
+    public function test_article_partage_belongs_to_article_and_user(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         $user = User::factory()->create();
-        $ressource = Ressource::factory()->create();
-        $partage = RessourcePartage::factory()->create([
+        $article = article::factory()->create();
+        $partage = articlePartage::factory()->create([
             'user_id' => $user->id,
-            'ressource_id' => $ressource->id,
+            'article_id' => $article->id,
         ]);
 
         // Act
-        $linkedRessource = $partage->ressource;
+        $linkedarticle = $partage->article;
         $linkedDestinataire = $partage->destinataire;
 
         // Assert
-        $this->assertInstanceOf(Ressource::class, $linkedRessource);
-        $this->assertEquals($ressource->id, $linkedRessource->id);
+        $this->assertInstanceOf(article::class, $linkedarticle);
+        $this->assertEquals($article->id, $linkedarticle->id);
 
         $this->assertInstanceOf(User::class, $linkedDestinataire);
         $this->assertEquals($user->id, $linkedDestinataire->id);

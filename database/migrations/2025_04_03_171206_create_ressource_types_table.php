@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ressource_types', function (Blueprint $table) {
+        Schema::create('article_types', function (Blueprint $table) {
             $table->id();
-            $table->string('lib_ressource_type');
+            $table->string('lib_article_type');
             $table->boolean('visible');
             $table->timestamps();
         });
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ressource_types');
+        Schema::dropIfExists('article_types');
     }
 };
