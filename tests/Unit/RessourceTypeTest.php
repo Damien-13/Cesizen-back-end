@@ -11,7 +11,7 @@ class articleTypeTest extends TestCase
 {
     use RefreshDatabase;
     
-    public function test_article_type_belongs_to_many_ressources(): void
+    public function test_article_type_belongs_to_many_articles(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
@@ -21,10 +21,10 @@ class articleTypeTest extends TestCase
         ]);
 
         // Act
-        $ressources = $type->ressources;
+        $articles = $type->articles;
 
         // Assert
-        $this->assertCount(2, $ressources);
-        $this->assertInstanceOf(article::class, $ressources->first());
+        $this->assertCount(2, $articles);
+        $this->assertInstanceOf(article::class, $articles->first());
     }
 }

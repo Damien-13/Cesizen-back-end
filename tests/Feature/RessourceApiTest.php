@@ -14,25 +14,25 @@ class articleApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_list_ressources(): void
+    public function test_can_list_articles(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         article::factory()->count(3)->create();
 
         // Act
-        $response = $this->getJson('/api/ressources');
+        $response = $this->getJson('/api/articles');
 
         // Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => true,
-                'message' => 'Liste des ressources récupérée avec succès',
+                'message' => 'Liste des articles récupérée avec succès',
             ])
             ->assertJsonCount(3, 'data');
     }
 
-    public function test_can_filter_ressources_by_valide(): void
+    public function test_can_filter_articles_by_valide(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
@@ -40,13 +40,13 @@ class articleApiTest extends TestCase
         article::factory()->create(['valide' => false]);
 
         // Act
-        $response = $this->getJson('/api/ressources?valide=true');
+        $response = $this->getJson('/api/articles?valide=true');
 
         // Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => true,
-                'message' => 'Liste des ressources récupérée avec succès',
+                'message' => 'Liste des articles récupérée avec succès',
             ])
             ->assertJsonFragment(['valide' => 1])
             ->assertJsonMissing(['valide' => 0]);
@@ -75,7 +75,7 @@ class articleApiTest extends TestCase
         ];
 
         // Act
-        $response = $this->postJson('/api/ressources', $payload);
+        $response = $this->postJson('/api/articles', $payload);
 
         // Assert
         $response->assertStatus(201)
@@ -87,7 +87,7 @@ class articleApiTest extends TestCase
                 ],
             ]);
 
-        $this->assertDatabaseHas('ressources', [
+        $this->assertDatabaseHas('articles', [
             'titre' => 'Test titre',
         ]);
     }
@@ -99,7 +99,7 @@ class articleApiTest extends TestCase
         $article = article::factory()->create();
 
         // Act
-        $response = $this->getJson("/api/ressources/{$article->id}");
+        $response = $this->getJson("/api/articles/{$article->id}");
 
         // Assert
         $response->assertStatus(200)
@@ -136,7 +136,7 @@ class articleApiTest extends TestCase
         ];
 
         // Act
-        $response = $this->putJson("/api/ressources/{$article->id}", $payload);
+        $response = $this->putJson("/api/articles/{$article->id}", $payload);
 
         // Assert
         $response->assertStatus(200)
@@ -148,7 +148,7 @@ class articleApiTest extends TestCase
                 ],
             ]);
 
-        $this->assertDatabaseHas('ressources', [
+        $this->assertDatabaseHas('articles', [
             'id' => $article->id,
             'titre' => 'Titre modifié',
         ]);
@@ -161,7 +161,7 @@ class articleApiTest extends TestCase
         $article = article::factory()->create();
 
         // Act
-        $response = $this->deleteJson("/api/ressources/{$article->id}");
+        $response = $this->deleteJson("/api/articles/{$article->id}");
 
         // Assert
         $response->assertStatus(200)
@@ -170,7 +170,7 @@ class articleApiTest extends TestCase
                 'message' => 'article supprimée avec succès',
             ]);
 
-        $this->assertDatabaseMissing('ressources', [
+        $this->assertDatabaseMissing('articles', [
             'id' => $article->id,
         ]);
     }

@@ -15,7 +15,7 @@ class articleCategorie extends Model
         'visible'
     ];
 
-    public function ressources(): HasMany {
+    public function articles(): HasMany {
         return $this->hasMany(article::class);
     }
 }

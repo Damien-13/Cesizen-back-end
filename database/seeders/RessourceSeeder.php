@@ -19,7 +19,7 @@ class articleSeeder extends Seeder
         $categories = articleCategorie::pluck('id', 'lib_article_categorie');
         $relationTypes = RelationType::pluck('id', 'lib_relation_type');
 
-        $ressources = [
+        $articles = [
             [
                 'titre' => 'Améliorer la communication dans le couple',
                 'description' => "Apprendre à exprimer clairement ses besoins et à écouter activement son partenaire permet de prévenir les malentendus et de renforcer la confiance.
@@ -137,7 +137,7 @@ class articleSeeder extends Seeder
             ],
         ];
 
-        foreach ($ressources as $data) {
+        foreach ($articles as $data) {
             article::create([
                 'titre' => $data['titre'],
                 'description' => $data['description'],

@@ -17,7 +17,7 @@ use App\Http\Controllers\API\RoleController;
 Route::apiResource('regions', RegionController::class);
 Route::apiResource('departements', DepartementController::class);
 Route::apiResource('users', UserController::class);
-Route::apiResource('ressources', articleController::class);
+Route::apiResource('articles', articleController::class);
 Route::apiResource('article_types', articleTypeController::class);
 Route::apiResource('article_categories', articleCategorieController::class);
 Route::apiResource('relation_types', RelationTypeController::class);

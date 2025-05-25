@@ -41,7 +41,7 @@ class articlePartageController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'article_id' => 'required|exists:ressources,id',
+            'article_id' => 'required|exists:articles,id',
             'email_destinataire' => 'required|email|exists:users,email',
         ]);
 

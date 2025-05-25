@@ -36,7 +36,7 @@ class articlePartageApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'status' => true,
-                'message' => 'Liste des ressources récupérée avec succès',
+                'message' => 'Liste des articles récupérée avec succès',
             ])
             ->assertJsonFragment([
                 'id' => $partageActif->id,

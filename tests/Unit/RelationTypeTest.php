@@ -21,10 +21,10 @@ class RelationTypeTest extends TestCase
         ]);
 
         // Act
-        $articles = $relation_type->ressources;
+        $articles = $relation_type->articles;
 
         // Assert
-        $this->assertCount(1, $ressources);
-        $this->assertInstanceOf(article::class, $ressources->first());
+        $this->assertCount(1, $articles);
+        $this->assertInstanceOf(article::class, $articles->first());
     }
 }

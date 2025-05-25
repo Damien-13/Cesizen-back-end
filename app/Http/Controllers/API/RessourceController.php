@@ -44,10 +44,10 @@ class articleController extends Controller
                     $articlesPartageesIds = articlePartage::where('user_id', $userId)
                         ->pluck('article_id');
 
-                    $query->where(function ($q) use ($userId, $ressourcesPartageesIds) {
+                    $query->where(function ($q) use ($userId, $articlesPartageesIds) {
                         $q->where('restreint', false)
                             ->orWhere('user_id', $userId)
-                            ->orWhereIn('id', $ressourcesPartageesIds);
+                            ->orWhereIn('id', $articlesPartageesIds);
                     });
                 }
             }
@@ -58,7 +58,7 @@ class articleController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Liste des articles récupérée avec succès',
-            'data' => $ressources
+            'data' => $articles
         ], 200);
     }
 
