@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('lib_message');
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('ressource_id')->constrained();
+            $table->foreignId('article_id')->constrained();
 
             //Réponses à message nullable
             $table->foreignId('parent_id')

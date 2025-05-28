@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\RelationType;
-use App\Models\Ressource;
+use App\Models\article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -150,12 +150,12 @@ class RelationTypeApiTest extends TestCase
         ]);
     }
 
-    public function test_cannot_delete_relation_type_with_ressource(): void
+    public function test_cannot_delete_relation_type_with_article(): void
     {
         //Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         $typeRelation = RelationType::factory()->create();
-        Ressource::factory()->create(['relation_type_id' => $typeRelation->id]);
+        article::factory()->create(['relation_type_id' => $typeRelation->id]);
 
         //Act
         $response = $this->deleteJson("/api/relation_types/{$typeRelation->id}");
@@ -164,7 +164,7 @@ class RelationTypeApiTest extends TestCase
         $response->assertStatus(400)
             ->assertJson([
                 'status' => false,
-                'message' => 'Ce type de relation ne peut être supprimé : il est utilisé par une ressource.',
+                'message' => 'Ce type de relation ne peut être supprimé : il est utilisé par une article.',
             ]);
 
         $this->assertDatabaseHas('relation_types', [

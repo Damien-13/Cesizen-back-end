@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ressource_categories', function (Blueprint $table) {
+        Schema::create('article_partages', function (Blueprint $table) {
             $table->id();
-            $table->string('lib_ressource_categorie');
-            $table->boolean('visible');
+            $table->foreignId('article_id')->constrained()->cascadeOnDelete();;
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
+
+            $table->unique(['article_id', 'user_id']);
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ressource_categories');
+        Schema::dropIfExists('article_partages');
     }
 };

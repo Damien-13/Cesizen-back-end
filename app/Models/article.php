@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Ressource extends Model
+class article extends Model
 {
     use HasFactory;
 
@@ -18,8 +18,8 @@ class Ressource extends Model
         'url',
         'valide',
         'user_id',
-        'ressource_categorie_id',
-        'ressource_type_id',
+        'article_categorie_id',
+        'article_type_id',
         'relation_type_id'
     ];
 
@@ -28,14 +28,14 @@ class Ressource extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function ressourceCategorie(): BelongsTo
+    public function articleCategorie(): BelongsTo
     {
-        return $this->belongsTo(RessourceCategorie::class);
+        return $this->belongsTo(articleCategorie::class);
     }
 
-    public function ressourceType(): BelongsTo
+    public function articleType(): BelongsTo
     {
-        return $this->belongsTo(RessourceType::class);
+        return $this->belongsTo(articleType::class);
     }
 
     public function relationType(): BelongsTo

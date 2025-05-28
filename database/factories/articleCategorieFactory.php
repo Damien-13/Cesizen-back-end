@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RessourceCategorie>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\articleCategorie>
  */
-class RessourceCategorieFactory extends Factory
+class articleCategorieFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class RessourceCategorieFactory extends Factory
     public function definition(): array
     {
         return [
-            'lib_ressource_categorie' => $this->faker->word,
+            'lib_article_categorie' => $this->faker->word,
             'visible' => $this->faker->boolean,
         ];
     }

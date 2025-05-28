@@ -2,29 +2,29 @@
 
 namespace Tests\Unit;
 
-use App\Models\Ressource;
-use App\Models\RessourceType;
+use App\Models\article;
+use App\Models\articleType;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class RessourceTypeTest extends TestCase
+class articleTypeTest extends TestCase
 {
     use RefreshDatabase;
     
-    public function test_ressource_type_belongs_to_many_ressources(): void
+    public function test_article_type_belongs_to_many_articles(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
-        $type = RessourceType::factory()->create();
-        Ressource::factory()->count(2)->create([
-            'ressource_type_id' => $type->id,
+        $type = articleType::factory()->create();
+        article::factory()->count(2)->create([
+            'article_type_id' => $type->id,
         ]);
 
         // Act
-        $ressources = $type->ressources;
+        $articles = $type->articles;
 
         // Assert
-        $this->assertCount(2, $ressources);
-        $this->assertInstanceOf(Ressource::class, $ressources->first());
+        $this->assertCount(2, $articles);
+        $this->assertInstanceOf(article::class, $articles->first());
     }
 }

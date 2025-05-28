@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Ressource;
+use App\Models\article;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RessourcePartage>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\articlePartage>
  */
-class RessourcePartageFactory extends Factory
+class articlePartageFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,7 +19,7 @@ class RessourcePartageFactory extends Factory
     public function definition(): array
     {
         return [
-            'ressource_id' => Ressource::factory(),
+            'article_id' => article::factory(),
             'user_id' => User::factory(),
         ];
     }

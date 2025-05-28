@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ressource;
-use App\Models\RessourcePartage;
+use App\Models\article;
+use App\Models\articlePartage;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class RessourceController extends Controller
+class articleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $query = Ressource::with(['user', 'ressourceType', 'ressourceCategorie', 'relationType'])
+        $query = article::with(['user', 'articleType', 'articleCategorie', 'relationType'])
             ->orderBy('created_at', 'desc');
 
         // Filtre optionnel : "valide"
@@ -41,24 +41,24 @@ class RessourceController extends Controller
                     // aucun filtre
                 } else {
                     // Utilisateur = publiques + personnelles + partagées
-                    $ressourcesPartageesIds = RessourcePartage::where('user_id', $userId)
-                        ->pluck('ressource_id');
+                    $articlesPartageesIds = articlePartage::where('user_id', $userId)
+                        ->pluck('article_id');
 
-                    $query->where(function ($q) use ($userId, $ressourcesPartageesIds) {
+                    $query->where(function ($q) use ($userId, $articlesPartageesIds) {
                         $q->where('restreint', false)
                             ->orWhere('user_id', $userId)
-                            ->orWhereIn('id', $ressourcesPartageesIds);
+                            ->orWhereIn('id', $articlesPartageesIds);
                     });
                 }
             }
         }
 
-        $ressources = $query->get();
+        $articles = $query->get();
 
         return response()->json([
             'status' => true,
-            'message' => 'Liste des ressources récupérée avec succès',
-            'data' => $ressources
+            'message' => 'Liste des articles récupérée avec succès',
+            'data' => $articles
         ], 200);
     }
 
@@ -75,38 +75,38 @@ class RessourceController extends Controller
             'url' => 'nullable|string|max:255',
             'valide' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
-            'ressource_categorie_id' => 'required|exists:ressource_categories,id',
-            'ressource_type_id' => 'required|exists:ressource_types,id',
+            'article_categorie_id' => 'required|exists:article_categories,id',
+            'article_type_id' => 'required|exists:article_types,id',
             'relation_type_id' => 'required|exists:relation_types,id'
         ]);
 
-        $ressource = Ressource::create($validated);
+        $article = article::create($validated);
 
         return response()->json([
             'status' => true,
-            'message' => 'Ressource ajoutée avec succès',
-            'data' => $ressource
+            'message' => 'article ajoutée avec succès',
+            'data' => $article
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Ressource $ressource)
+    public function show(article $article)
     {
-        $ressource->load(['user', 'ressourceType', 'ressourceCategorie', 'relationType']);
+        $article->load(['user', 'articleType', 'articleCategorie', 'relationType']);
 
         return response()->json([
             'status' => true,
-            'message' => 'Ressource trouvée avec succès',
-            'data' => $ressource
+            'message' => 'article trouvée avec succès',
+            'data' => $article
         ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ressource $ressource)
+    public function update(Request $request, article $article)
     {
         $validated = $request->validate([
             'titre' => 'required|string|max:100',
@@ -116,30 +116,30 @@ class RessourceController extends Controller
             'url' => 'nullable|string|max:255',
             'valide' => 'required|boolean',
             'user_id' => 'required|exists:users,id',
-            'ressource_categorie_id' => 'required|exists:ressource_categories,id',
-            'ressource_type_id' => 'required|exists:ressource_types,id',
+            'article_categorie_id' => 'required|exists:article_categories,id',
+            'article_type_id' => 'required|exists:article_types,id',
             'relation_type_id' => 'required|exists:relation_types,id'
         ]);
 
-        $ressource->update($validated);
+        $article->update($validated);
 
         return response()->json([
             'status' => true,
-            'message' => 'Ressource modifiée avec succès',
-            'data' => $ressource
+            'message' => 'article modifiée avec succès',
+            'data' => $article
         ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ressource $ressource)
+    public function destroy(article $article)
     {
-        $ressource->delete();
+        $article->delete();
 
         return response()->json([
             'status' => true,
-            'message' => 'Ressource supprimée avec succès'
+            'message' => 'article supprimée avec succès'
         ], 200);
     }
 }

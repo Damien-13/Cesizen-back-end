@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ressources', function (Blueprint $table) {
+        Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
             $table->text('description');
@@ -22,8 +22,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreignId('user_id')->constrained()->onDelete('restrict');
-            $table->foreignId('ressource_categorie_id')->constrained()->onDelete('restrict');
-            $table->foreignId('ressource_type_id')->constrained()->onDelete('restrict');
+            $table->foreignId('article_categorie_id')->constrained()->onDelete('restrict');
+            $table->foreignId('article_type_id')->constrained()->onDelete('restrict');
             $table->foreignId('relation_type_id')->constrained()->onDelete('restrict');
         });
     }
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ressources');
+        Schema::dropIfExists('articles');
     }
 };

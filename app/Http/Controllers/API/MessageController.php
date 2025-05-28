@@ -30,7 +30,7 @@ class MessageController extends Controller
         $validated = $request->validate([
             'lib_message' => 'required|string|max:500',
             'user_id' => 'required|exists:users,id',
-            'ressource_id' => 'required|exists:ressources,id',
+            'article_id' => 'required|exists:articles,id',
             'parent_id' => 'nullable|exists:commentaires,id',
         ]);
 
@@ -48,7 +48,7 @@ class MessageController extends Controller
      */
     public function show(Message $message)
     {
-        $message->load(['user', 'ressource', 'reponses']);
+        $message->load(['user', 'article', 'reponses']);
 
         return response()->json([
             'status' => true,
@@ -65,7 +65,7 @@ class MessageController extends Controller
         $validated = $request->validate([
             'lib_message' => 'required|string|max:500',
             'user_id' => 'required|exists:users,id',
-            'ressource_id' => 'required|exists:ressources,id',
+            'article_id' => 'required|exists:articles,id',
             'parent_id' => 'nullable|exists:commentaires,id',
         ]);
 

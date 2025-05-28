@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class RessourceCategorie extends Model
+class articleCategorie extends Model
 {
     use HasFactory;
     
     protected $fillable = [
-        'lib_ressource_categorie',
+        'lib_article_categorie',
         'visible'
     ];
 
-    public function ressources(): HasMany {
-        return $this->hasMany(Ressource::class);
+    public function articles(): HasMany {
+        return $this->hasMany(article::class);
     }
 }

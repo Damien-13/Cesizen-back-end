@@ -3,15 +3,15 @@
 namespace Database\Factories;
 
 use App\Models\RelationType;
-use App\Models\RessourceCategorie;
-use App\Models\RessourceType;
+use App\Models\articleCategorie;
+use App\Models\articleType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ressource>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\article>
  */
-class RessourceFactory extends Factory
+class articleFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -29,8 +29,8 @@ class RessourceFactory extends Factory
             'valide' => $this->faker->boolean,
 
             'user_id' => User::factory(),
-            'ressource_categorie_id' => RessourceCategorie::factory(),
-            'ressource_type_id' => RessourceType::factory(),
+            'article_categorie_id' => articleCategorie::factory(),
+            'article_type_id' => articleType::factory(),
             'relation_type_id' => RelationType::factory(),
         ];
     }

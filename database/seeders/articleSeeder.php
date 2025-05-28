@@ -3,23 +3,23 @@
 namespace Database\Seeders;
 
 use App\Models\RelationType;
-use App\Models\Ressource;
-use App\Models\RessourceCategorie;
+use App\Models\article;
+use App\Models\articleCategorie;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RessourceSeeder extends Seeder
+class articleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $categories = RessourceCategorie::pluck('id', 'lib_ressource_categorie');
+        $categories = articleCategorie::pluck('id', 'lib_article_categorie');
         $relationTypes = RelationType::pluck('id', 'lib_relation_type');
 
-        $ressources = [
+        $articles = [
             [
                 'titre' => 'Améliorer la communication dans le couple',
                 'description' => "Apprendre à exprimer clairement ses besoins et à écouter activement son partenaire permet de prévenir les malentendus et de renforcer la confiance.
@@ -137,8 +137,8 @@ class RessourceSeeder extends Seeder
             ],
         ];
 
-        foreach ($ressources as $data) {
-            Ressource::create([
+        foreach ($articles as $data) {
+            article::create([
                 'titre' => $data['titre'],
                 'description' => $data['description'],
                 'nom_fichier' => null,
@@ -146,8 +146,8 @@ class RessourceSeeder extends Seeder
                 'valide' => $data['valide'],
                 'url' => $data['url'],
                 'user_id' => User::inRandomOrder()->first()->id,
-                'ressource_categorie_id' => $data['categorie'],
-                'ressource_type_id' => 1,
+                'article_categorie_id' => $data['categorie'],
+                'article_type_id' => 1,
                 'relation_type_id' => $data['relation'],
             ]);
         }

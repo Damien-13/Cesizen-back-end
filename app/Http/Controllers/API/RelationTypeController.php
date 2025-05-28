@@ -87,13 +87,13 @@ class RelationTypeController extends Controller
      */
     public function destroy($id)
     {
-        // Vérifier si ressource utilise ce type de relation
+        // Vérifier si article utilise ce type de relation
         $relationType = RelationType::find($id);
         if ($relationType) {
-            if ($relationType->ressources()->exists()) {
+            if ($relationType->articles()->exists()) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Ce type de relation ne peut être supprimé : il est utilisé par une ressource.'
+                    'message' => 'Ce type de relation ne peut être supprimé : il est utilisé par une article.'
                 ], 400);
             } else {
                 $relationType->delete();

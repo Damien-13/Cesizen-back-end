@@ -2,22 +2,22 @@
 
 namespace Tests\Feature;
 
-use App\Models\Ressource;
-use App\Models\RessourceCategorie;
+use App\Models\article;
+use App\Models\articleCategorie;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RessourceCategorieApiTest extends TestCase
+class articleCategorieApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_list_ressource_categories(): void
+    public function test_can_list_article_categories(): void
     {
         //Arrange
-        RessourceCategorie::factory()->count(3)->create();
+        articleCategorie::factory()->count(3)->create();
 
         //Act
-        $response = $this->getJson('/api/ressource_categories');
+        $response = $this->getJson('/api/article_categories');
 
         //Assert
         $response->assertStatus(200)
@@ -25,7 +25,7 @@ class RessourceCategorieApiTest extends TestCase
                 'status',
                 'message',
                 'data' => [
-                    '*' => ['id', 'lib_ressource_categorie', 'visible', 'created_at', 'updated_at']
+                    '*' => ['id', 'lib_article_categorie', 'visible', 'created_at', 'updated_at']
                 ]
             ]);
     }
@@ -33,11 +33,11 @@ class RessourceCategorieApiTest extends TestCase
     public function test_can_list_by_visible(): void
     {
         //Arrange
-        RessourceCategorie::factory()->create(['visible' => true]);
-        RessourceCategorie::factory()->create(['visible' => false]);
+        articleCategorie::factory()->create(['visible' => true]);
+        articleCategorie::factory()->create(['visible' => false]);
 
         //Act
-        $response = $this->getJson('/api/ressource_categories?visible=true');
+        $response = $this->getJson('/api/article_categories?visible=true');
 
         //Assert
         $response->assertStatus(200)
@@ -45,129 +45,129 @@ class RessourceCategorieApiTest extends TestCase
             ->assertJsonMissing(['visible' => 0]);
     }
 
-    public function test_can_store_ressource_categorie(): void
+    public function test_can_store_article_categorie(): void
     {
         //Arrange
         $payload = [
-            'lib_ressource_categorie' => 'Images',
+            'lib_article_categorie' => 'Images',
             'visible' => true,
         ];
 
         //Act
-        $response = $this->postJson('/api/ressource_categories', $payload);
+        $response = $this->postJson('/api/article_categories', $payload);
 
         //Assert
         $response->assertStatus(201)
             ->assertJson([
                 'status' => true,
-                'message' => 'Catégorie de ressource ajoutée avec succès',
+                'message' => 'Catégorie de article ajoutée avec succès',
                 'data' => [
-                    'lib_ressource_categorie' => 'Images',
+                    'lib_article_categorie' => 'Images',
                     'visible' => 1,
                 ]
             ]);
 
-        $this->assertDatabaseHas('ressource_categories', [
-            'lib_ressource_categorie' => 'Images',
+        $this->assertDatabaseHas('article_categories', [
+            'lib_article_categorie' => 'Images',
             'visible' => 1,
         ]);
     }
 
-    public function test_can_show_ressource_categorie(): void
+    public function test_can_show_article_categorie(): void
     {
         //Arrange
-        $categorie = RessourceCategorie::factory()->create([
-            'lib_ressource_categorie' => 'PDF',
+        $categorie = articleCategorie::factory()->create([
+            'lib_article_categorie' => 'PDF',
             'visible' => true,
         ]);
 
         //Act
-        $response = $this->getJson("/api/ressource_categories/{$categorie->id}");
+        $response = $this->getJson("/api/article_categories/{$categorie->id}");
 
         //Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => true,
-                'message' => 'Catégorie de ressource trouvée avec succès',
+                'message' => 'Catégorie de article trouvée avec succès',
             ])
             ->assertJsonStructure([
                 'data'
             ]);
     }
 
-    public function test_can_update_ressource_categorie(): void
+    public function test_can_update_article_categorie(): void
     {
         //Arrange
-        $categorie = RessourceCategorie::factory()->create([
-            'lib_ressource_categorie' => 'Video',
+        $categorie = articleCategorie::factory()->create([
+            'lib_article_categorie' => 'Video',
             'visible' => true,
         ]);
 
         $payload = [
-            'lib_ressource_categorie' => 'Video Updated',
+            'lib_article_categorie' => 'Video Updated',
             'visible' => false,
         ];
 
         //Act
-        $response = $this->putJson("/api/ressource_categories/{$categorie->id}", $payload);
+        $response = $this->putJson("/api/article_categories/{$categorie->id}", $payload);
 
         //Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => true,
-                'message' => 'Catégorie de ressource modifiée avec succès',
+                'message' => 'Catégorie de article modifiée avec succès',
                 'data' => [
                     'id' => $categorie->id,
-                    'lib_ressource_categorie' => 'Video Updated',
+                    'lib_article_categorie' => 'Video Updated',
                     'visible' => 0,
                 ]
             ]);
 
-        $this->assertDatabaseHas('ressource_categories', [
+        $this->assertDatabaseHas('article_categories', [
             'id' => $categorie->id,
-            'lib_ressource_categorie' => 'Video Updated',
+            'lib_article_categorie' => 'Video Updated',
             'visible' => 0,
         ]);
     }
 
-    public function test_can_delete_ressource_categorie(): void
+    public function test_can_delete_article_categorie(): void
     {
         //Arrange
-        $categorie = RessourceCategorie::factory()->create();
+        $categorie = articleCategorie::factory()->create();
 
         //Act
-        $response = $this->deleteJson("/api/ressource_categories/{$categorie->id}");
+        $response = $this->deleteJson("/api/article_categories/{$categorie->id}");
 
         //Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => true,
-                'message' => 'Catégorie de ressource supprimée avec succès',
+                'message' => 'Catégorie de article supprimée avec succès',
             ]);
 
-        $this->assertDatabaseMissing('ressource_categories', [
+        $this->assertDatabaseMissing('article_categories', [
             'id' => $categorie->id,
         ]);
     }
 
-    public function test_cannot_delete_categorie_with_ressource(): void
+    public function test_cannot_delete_categorie_with_article(): void
     {
         //Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
-        $categorie = RessourceCategorie::factory()->create();
-        Ressource::factory()->create(['ressource_categorie_id' => $categorie->id]);
+        $categorie = articleCategorie::factory()->create();
+        article::factory()->create(['article_categorie_id' => $categorie->id]);
 
         //Act
-        $response = $this->deleteJson("/api/ressource_categories/{$categorie->id}");
+        $response = $this->deleteJson("/api/article_categories/{$categorie->id}");
 
         //Assert
         $response->assertStatus(400)
             ->assertJson([
                 'status' => false,
-                'message' => 'Cette catégorie ne peut être supprimée : elle est utilisée par une ressource.',
+                'message' => 'Cette catégorie ne peut être supprimée : elle est utilisée par une article.',
             ]);
 
-        $this->assertDatabaseHas('ressource_categories', [
+        $this->assertDatabaseHas('article_categories', [
             'id' => $categorie->id,
         ]);
     }

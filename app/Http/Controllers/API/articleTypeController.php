@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\RessourceType;
+use App\Models\articleType;
 use Illuminate\Http\Request;
 
-class RessourceTypeController extends Controller
+class articleTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $ressourceTypes = RessourceType::orderBy('lib_ressource_type')->get();
+        $articleTypes = articleType::orderBy('lib_article_type')->get();
 
         return response()->json([
             'status' => true,
-            'message' => 'Liste des types de ressource récupérée avec succès',
-            'data' => $ressourceTypes
+            'message' => 'Liste des types de article récupérée avec succès',
+            'data' => $articleTypes
         ], 200);
     }
 
@@ -28,60 +28,60 @@ class RessourceTypeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'lib_ressource_type' => 'required|string|max:100',
+            'lib_article_type' => 'required|string|max:100',
             'visible' => 'required|boolean',
         ]);
 
-        $ressourcetype = RessourceType::create($validated);
+        $articletype = articleType::create($validated);
 
         return response()->json([
             'status' => true,
-            'message' => 'Type de ressource ajouté avec succès',
-            'data' => $ressourcetype
+            'message' => 'Type de article ajouté avec succès',
+            'data' => $articletype
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(RessourceType $ressourcetype)
+    public function show(articleType $articletype)
     {
         return response()->json([
             'status' => true,
-            'message' => 'Type de ressource trouvé avec succès',
-            'data' => $ressourcetype
+            'message' => 'Type de article trouvé avec succès',
+            'data' => $articletype
         ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RessourceType $ressourceType)
+    public function update(Request $request, articleType $articleType)
     {
         $validated = $request->validate([
-            'lib_ressource_type' => 'required|string|max:100',
+            'lib_article_type' => 'required|string|max:100',
             'visible' => 'required|boolean',
         ]);
 
-        $ressourceType->update($validated);
+        $articleType->update($validated);
 
         return response()->json([
             'status' => true,
-            'message' => 'Type de ressource modifié avec succès',
-            'data' => $ressourceType
+            'message' => 'Type de article modifié avec succès',
+            'data' => $articleType
         ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RessourceType $ressourceType)
+    public function destroy(articleType $articleType)
     {
-        $ressourceType->delete();
+        $articleType->delete();
 
         return response()->json([
             'status' => true,
-            'message' => 'Type de ressource supprimé avec succès'
+            'message' => 'Type de article supprimé avec succès'
         ], 200);
     }
 }

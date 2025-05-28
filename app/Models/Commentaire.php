@@ -12,7 +12,7 @@ class Commentaire extends Model
         'lib_commentaire',
         'visible',
         'user_id',
-        'ressource_id',
+        'article_id',
         'parent_id'
     ];
 
@@ -26,8 +26,8 @@ class Commentaire extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function ressource(): BelongsTo
+    public function article(): BelongsTo
     {
-        return $this->belongsTo(Ressource::class);
+        return $this->belongsTo(article::class);
     }
 }

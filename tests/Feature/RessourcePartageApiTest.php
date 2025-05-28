@@ -2,41 +2,41 @@
 
 namespace Tests\Feature;
 
-use App\Models\Ressource;
-use App\Models\RessourcePartage;
+use App\Models\article;
+use App\Models\articlePartage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RessourcePartageApiTest extends TestCase
+class articlePartageApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_list_ressource_partages(): void
+    public function test_can_list_article_partages(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         $userActif = User::factory()->create(['actif' => 1]);
         $userInactif = User::factory()->create(['actif' => 0]);
 
-        $ressource = Ressource::factory()->create();
-        $partageActif = RessourcePartage::factory()->create([
+        $article = article::factory()->create();
+        $partageActif = articlePartage::factory()->create([
             'user_id' => $userActif->id,
-            'ressource_id' => $ressource->id,
+            'article_id' => $article->id,
         ]);
-        $partageInactif = RessourcePartage::factory()->create([
+        $partageInactif = articlePartage::factory()->create([
             'user_id' => $userInactif->id,
-            'ressource_id' => $ressource->id,
+            'article_id' => $article->id,
         ]);
 
         // Act
-        $response = $this->getJson('/api/ressource_partages');
+        $response = $this->getJson('/api/article_partages');
 
         // Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => true,
-                'message' => 'Liste des ressources récupérée avec succès',
+                'message' => 'Liste des articles récupérée avec succès',
             ])
             ->assertJsonFragment([
                 'id' => $partageActif->id,
@@ -46,25 +46,25 @@ class RessourcePartageApiTest extends TestCase
             ]);
     }
 
-    public function test_can_filter_ressource_partages_by_ressource_id(): void
+    public function test_can_filter_article_partages_by_article_id(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         $user = User::factory()->create(['actif' => 1]);
-        $ressource1 = Ressource::factory()->create();
-        $ressource2 = Ressource::factory()->create();
+        $article1 = article::factory()->create();
+        $article2 = article::factory()->create();
 
-        $partage1 = RessourcePartage::factory()->create([
+        $partage1 = articlePartage::factory()->create([
             'user_id' => $user->id,
-            'ressource_id' => $ressource1->id,
+            'article_id' => $article1->id,
         ]);
-        $partage2 = RessourcePartage::factory()->create([
+        $partage2 = articlePartage::factory()->create([
             'user_id' => $user->id,
-            'ressource_id' => $ressource2->id,
+            'article_id' => $article2->id,
         ]);
 
         // Act
-        $response = $this->getJson('/api/ressource_partages?ressource_id=' . $ressource1->id);
+        $response = $this->getJson('/api/article_partages?article_id=' . $article1->id);
 
         // Assert
         $response->assertStatus(200)
@@ -76,20 +76,20 @@ class RessourcePartageApiTest extends TestCase
             ]);
     }
 
-    public function test_can_store_ressource_partage(): void
+    public function test_can_store_article_partage(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         $user = User::factory()->create(['actif' => 1]);
-        $ressource = Ressource::factory()->create();
+        $article = article::factory()->create();
 
         $payload = [
-            'ressource_id' => $ressource->id,
+            'article_id' => $article->id,
             'email_destinataire' => $user->email,
         ];
 
         // Act
-        $response = $this->postJson('/api/ressource_partages', $payload);
+        $response = $this->postJson('/api/article_partages', $payload);
 
         // Assert
         $response->assertStatus(201)
@@ -98,8 +98,8 @@ class RessourcePartageApiTest extends TestCase
                 'message' => 'Partage de ressouce ajouté avec succès',
             ]);
 
-        $this->assertDatabaseHas('ressource_partages', [
-            'ressource_id' => $ressource->id,
+        $this->assertDatabaseHas('article_partages', [
+            'article_id' => $article->id,
             'user_id' => $user->id,
         ]);
     }
@@ -108,15 +108,15 @@ class RessourcePartageApiTest extends TestCase
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
-        $ressource = Ressource::factory()->create();
+        $article = article::factory()->create();
 
         $payload = [
-            'ressource_id' => $ressource->id,
+            'article_id' => $article->id,
             'email_destinataire' => 'inexistant@mail.com',
         ];
 
         // Act
-        $response = $this->postJson('/api/ressource_partages', $payload);
+        $response = $this->postJson('/api/article_partages', $payload);
 
         // Assert
         $response->assertStatus(422);
@@ -127,15 +127,15 @@ class RessourcePartageApiTest extends TestCase
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
         $user = User::factory()->create(['actif' => 0]);
-        $ressource = Ressource::factory()->create();
+        $article = article::factory()->create();
 
         $payload = [
-            'ressource_id' => $ressource->id,
+            'article_id' => $article->id,
             'email_destinataire' => $user->email,
         ];
 
         // Act
-        $response = $this->postJson('/api/ressource_partages', $payload);
+        $response = $this->postJson('/api/article_partages', $payload);
 
         // Assert
         $response->assertStatus(404)
@@ -145,24 +145,24 @@ class RessourcePartageApiTest extends TestCase
             ]);
     }
 
-    public function test_can_delete_ressource_partage(): void
+    public function test_can_delete_article_partage(): void
     {
         // Arrange
         $this->seed(\Database\Seeders\RolePermissionSeeder::class);
-        $ressourcePartage = RessourcePartage::factory()->create();
+        $articlePartage = articlePartage::factory()->create();
 
         // Act
-        $response = $this->deleteJson('/api/ressource_partages/' . $ressourcePartage->id);
+        $response = $this->deleteJson('/api/article_partages/' . $articlePartage->id);
 
         // Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => true,
-                'message' => 'Partage de ressource supprimé avec succès',
+                'message' => 'Partage de article supprimé avec succès',
             ]);
 
-        $this->assertDatabaseMissing('ressource_partages', [
-            'id' => $ressourcePartage->id,
+        $this->assertDatabaseMissing('article_partages', [
+            'id' => $articlePartage->id,
         ]);
     }
 }
