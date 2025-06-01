@@ -27,7 +27,9 @@ class DatabaseSeeder extends Seeder
             articleTypeSeeder::class,
             RelationTypeSeeder::class,
             CategorieSeeder::class,
-            articleSeeder::class
+            articleSeeder::class,
+            ExerciceRespirationSeeder::class,
+            AdministrerSeeder::class
         ]);
     }
 }

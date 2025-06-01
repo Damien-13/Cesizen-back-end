@@ -13,6 +13,7 @@ use App\Http\Controllers\API\articleTypeController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\ExerciceRespirationController;
 
 Route::apiResource('regions', RegionController::class);
 Route::apiResource('departements', DepartementController::class);
@@ -25,6 +26,8 @@ Route::apiResource('messages', MessageController::class);
 Route::apiResource('commentaires', CommentaireController::class);
 Route::apiResource('article_partages', articlePartageController::class);
 Route::apiResource('roles', RoleController::class);
+Route::apiResource('exercices', ExerciceRespirationController::class);
+
 
 //Route liée à la connexion et à la gestion du compte.
 Route::post('/login', [AuthController::class, 'login']);
