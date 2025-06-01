@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -35,7 +36,7 @@ class UserSeeder extends Seeder
                 'prenom' => $data['prenom'],
                 'email' => $data['email'],
                 'email_verified_at' => now(),
-                'password' => 'Password%13',
+                'password' => '1234',
                 'pseudo' => Str::slug($data['prenom']) . rand(10, 99),
                 'code_postal' => $data['code_postal'],
                 'ville' => $data['ville'],
