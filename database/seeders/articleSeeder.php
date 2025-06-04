@@ -6,14 +6,10 @@ use App\Models\RelationType;
 use App\Models\article;
 use App\Models\articleCategorie;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class articleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $categories = articleCategorie::pluck('id', 'lib_article_categorie');
@@ -21,119 +17,87 @@ class articleSeeder extends Seeder
 
         $articles = [
             [
-                'titre' => 'Améliorer la communication dans le couple',
-                'description' => "Apprendre à exprimer clairement ses besoins et à écouter activement son partenaire permet de prévenir les malentendus et de renforcer la confiance.
-                    \nApprendre à reformuler, gérer ses émotions et équilibrer les temps de parole est essentiel.
-                    \nGérer les désaccords sans conflit et instaurer un dialogue bienveillant favorise la complicité et le respect mutuel.",
-                'restreint' => false,
-                'valide' => false,
-                'url' => 'https://www.psychologies.com/couple/vie-de-couple/Les-3-astuces-pour-ameliorer-la-communication-dans-le-couple-selon-une-experte',
-                'categorie' => $categories['Vie de famille'],
-                'relation' => $relationTypes['Couple'],
+                'titre' => 'Comprendre les symptômes de l’anxiété',
+                'description' => "Palpitations, fatigue, troubles du sommeil : l’anxiété se manifeste de différentes façons.
+                    \nReconnaître ses symptômes est une première étape vers une meilleure gestion émotionnelle.
+                    \n👉 Article détaillé : https://www.ameli.fr/assure/sante/themes/anxiete",
+                'url' => 'https://www.ameli.fr/assure/sante/themes/anxiete',
+                'categorie' => $categories['Santé mentale'],
+                'relation' => $relationTypes['Dans l’espace public'],
             ],
             [
-                'titre' => 'Créer un lien de confiance avec un adolescent',
-                'description' => "Construire une relation de confiance avec un adolescent repose sur la patience et l’ouverture.
-                    \nUn cadre sécurisant tout en laissant place à l’autonomie est essentiel.
-                    \nL’écoute empathique, le respect des émotions et la valorisation des efforts favorisent un dialogue régulier.
-                    \nComprendre les enjeux liés à l’identité aide à soutenir l’adolescent face aux défis de cette période.",
-                'restreint' => false,
-                'valide' => true,
+                'titre' => 'Exercice de respiration : la cohérence cardiaque',
+                'description' => "Une méthode simple pour apaiser rapidement le stress.
+                    \nRespirez 6 fois par minute pendant 5 minutes, 3 fois par jour.
+                    \n🎥 Démonstration en vidéo : https://www.youtube.com/watch?v=YfXpspBv9BI",
+                'url' => 'https://www.youtube.com/watch?v=YfXpspBv9BI',
+                'categorie' => $categories['Relaxation'],
+                'relation' => $relationTypes['Avec un professionnel de santé'],
+            ],
+            [
+                'titre' => 'Comment bien dormir quand on est stressé ?',
+                'description' => "Le sommeil est essentiel à l’équilibre mental.
+                    \nRituels de coucher, déconnexion numérique, relaxation… découvrez 5 astuces pour améliorer votre endormissement.",
                 'url' => null,
-                'categorie' => $categories['Vie de famille'],
-                'relation' => $relationTypes['Parent-Enfant'],
+                'categorie' => $categories['Gestion du stress'],
+                'relation' => $relationTypes['Vie de famille'],
             ],
             [
-                'titre' => 'Apaiser les tensions dans la fratrie',
-                'description' => "Les tensions entre frères et sœurs peuvent générer du stress familial.
-                    \nReconnaître les besoins de chaque enfant, encourager l’expression des émotions et instaurer des règles claires facilitent la gestion des conflits.
-                    \nFavoriser la coopération et la solidarité valorise la singularité de chacun.
-                    \nCes actions contribuent à faire de la fratrie un espace d’apprentissage et de complicité durable.",
-                'restreint' => false,
-                'valide' => true,
-                'url' => 'https://www.ateliergigogne.com/actus/comment-gerer-les-conflits-dans-une-fratrie/',
-                'categorie' => $categories['Vie de famille'],
-                'relation' => $relationTypes['Fratrie'],
+                'titre' => 'Burn-out : 1 salarié sur 4 concerné',
+                'description' => "Une enquête 2024 de l’IFOP révèle qu’un salarié sur quatre présente des signes d’épuisement.
+                    \nQuels sont les signes avant-coureurs ? Comment agir rapidement ?
+                    \n📊 Résultats du sondage : https://ifop.com/burnout-2024/",
+                'url' => 'https://ifop.com/burnout-2024/',
+                'categorie' => $categories['Santé mentale'],
+                'relation' => $relationTypes['Entre collègues'],
             ],
             [
-                'titre' => 'Maintenir l’amitié à l’âge adulte',
-                'description' => "Entre travail, famille et responsabilités, entretenir ses amitiés demande un engagement conscient.
-                    \nCultiver des liens authentiques malgré la distance ou le manque de temps passe par la qualité des échanges, l’acceptation des évolutions personnelles et la capacité à exprimer ses besoins.
-                    \nPardonner les absences et créer des moments partagés réguliers renforcent la confiance et la durabilité des relations.",
-                'restreint' => false,
-                'valide' => true,
+                'titre' => '3 applis gratuites pour méditer',
+                'description' => "Petit Bambou, Respirelax+, Namatata : des applis testées et gratuites pour s’initier à la méditation.
+                    \n📱 Apprenez à vous recentrer en 10 minutes par jour.",
                 'url' => null,
-                'categorie' => $categories['Lien social et entraide'],
-                'relation' => $relationTypes['Amitié'],
+                'categorie' => $categories['Relaxation'],
+                'relation' => $relationTypes['À l’école ou en formation'],
             ],
             [
-                'titre' => 'Soutenir un collègue en difficulté',
-                'description' => "Identifier les signes d’alerte chez un collègue (isolement, baisse de motivation, stress visible) est essentiel.
-                    \nAdopter une posture d’écoute attentive sans jugement et proposer une aide concrète contribue à améliorer la situation.
-                    \nEncourager le recours aux dispositifs d’accompagnement tout en respectant la confidentialité est fondamental pour un climat professionnel sain.",
-                'restreint' => false,
-                'valide' => true,
+                'titre' => 'Exprimer ses émotions sans exploser',
+                'description' => "Colère, tristesse, frustration : mettre des mots sur ses ressentis permet de mieux les vivre.
+                    \nDécouvrez la communication non violente en 4 étapes.",
                 'url' => null,
-                'categorie' => $categories['Lien social et entraide'],
-                'relation' => $relationTypes['Voisinage'],
+                'categorie' => $categories['Émotions'],
+                'relation' => $relationTypes['En couple'],
             ],
             [
-                'titre' => 'Gérer les conflits entre voisins',
-                'description' => "Les conflits de voisinage ont un impact direct sur la qualité de vie.
-                    \nÉcouter activement les points de vue, communiquer calmement sans reproches et rechercher des solutions communes facilitent la résolution.
-                    \nLa médiation peut être une option utile.
-                    \nLe respect des règles et de la vie en communauté est un socle indispensable à la coexistence pacifique.",
-                'restreint' => false,
-                'valide' => true,
+                'titre' => 'Santé mentale : des inégalités sociales fortes',
+                'description' => "Selon Santé publique France, les personnes précaires souffrent deux fois plus de troubles anxieux.
+                    \n👉 En savoir plus : https://www.santepubliquefrance.fr/sante-mentale-et-precarite",
+                'url' => 'https://www.santepubliquefrance.fr/sante-mentale-et-precarite',
+                'categorie' => $categories['Santé mentale'],
+                'relation' => $relationTypes['Aidant et aidé·e'],
+            ],
+            [
+                'titre' => 'Se relaxer en 5 minutes au bureau',
+                'description' => "Tensions dans les épaules ? Fatigue mentale ?
+                    \nTestez ces micro-pauses de respiration et d’étirement discrètes à faire même devant son écran.",
                 'url' => null,
-                'categorie' => $categories['Lien social et entraide'],
-                'relation' => $relationTypes['Voisinage'],
+                'categorie' => $categories['Gestion du stress'],
+                'relation' => $relationTypes['Avec son supérieur hiérarchique'],
             ],
             [
-                'titre' => 'Inclure les personnes âgées isolées',
-                'description' => "L’isolement social chez les personnes âgées est un enjeu majeur de santé publique.
-                    \nLes visites régulières, les échanges intergénérationnels et la participation à des activités collectives renforcent le lien social.
-                    \nLe rôle des familles, aidants et communautés est crucial pour créer un environnement accueillant et stimulant.
-                    \nCes actions contribuent à améliorer le bien-être mental, l’autonomie et le sentiment d’appartenance.",
-                'restreint' => false,
-                'valide' => true,
+                'titre' => 'Identifier une crise de panique',
+                'description' => "Sueurs, vertiges, cœur qui s’emballe : comment différencier une crise d’angoisse d’un malaise cardiaque ?
+                    \nQue faire dans l’instant, et quand consulter ?",
                 'url' => null,
-                'categorie' => $categories['Lien social et entraide'],
-                'relation' => $relationTypes['Amitié'],
+                'categorie' => $categories['Émotions'],
+                'relation' => $relationTypes['Dans l’espace public'],
             ],
             [
-                'titre' => 'Créer une dynamique familiale positive',
-                'description' => "Une dynamique familiale saine repose sur l’écoute mutuelle, la coopération et la reconnaissance de chacun.
-                    \nL’éducation bienveillante encourage la mise en place de moments partagés, de règles claires et la valorisation des efforts.
-                    \nLa gestion apaisée des conflits renforce la cohésion et favorise le bonheur au sein du foyer.",
-                'restreint' => true,
-                'valide' => true,
-                'url' => null,
-                'categorie' => $categories['Vie de famille'],
-                'relation' => $relationTypes['Parent-Enfant'],
-            ],
-            [
-                'titre' => 'Accompagner un proche en dépression',
-                'description' => "L’accompagnement d’une personne dépressive nécessite empathie, patience et respect des limites.
-                    \nÉcouter sans juger, encourager la consultation professionnelle et prendre soin de soi sont des éléments essentiels.
-                    \nLa connaissance des idées reçues sur la maladie mentale aide à maintenir un lien familial et amical respectueux des rythmes individuels.",
-                'restreint' => false,
-                'valide' => true,
-                'url' => 'https://www.vidal.fr/maladies/psychisme/depression-adulte/aider-proche.html',
-                'categorie' => $categories['Santé'],
-                'relation' => $relationTypes['Amitié'],
-            ],
-            [
-                'titre' => 'Prévenir l’isolement social chez les jeunes',
-                'description' => "L’isolement social des jeunes peut avoir des conséquences graves sur leur développement.
-                    \nLes facteurs de risque incluent harcèlement, mal-être et rupture familiale.
-                    \nLa création de lieux d’écoute, les activités collectives et l’accompagnement professionnel sont des mesures préventives efficaces.
-                    \nLa détection précoce des signes et la valorisation des compétences individuelles favorisent la réinsertion sociale et l’épanouissement.",
-                'restreint' => true,
-                'valide' => false,
-                'url' => null,
-                'categorie' => $categories['Lien social et entraide'],
-                'relation' => $relationTypes['Parent-Enfant'],
+                'titre' => 'Podcast : le stress, comment le comprendre et l’apprivoiser ?',
+                'description' => "Un épisode de 15 minutes pour mieux comprendre les mécanismes du stress et découvrir des pistes concrètes.
+                    \n🎧 À écouter ici : https://open.spotify.com/episode/stress-apprivoiser",
+                'url' => 'https://open.spotify.com/episode/stress-apprivoiser',
+                'categorie' => $categories['Gestion du stress'],
+                'relation' => $relationTypes['Avec un professionnel de santé'],
             ],
         ];
 
@@ -142,8 +106,8 @@ class articleSeeder extends Seeder
                 'titre' => $data['titre'],
                 'description' => $data['description'],
                 'nom_fichier' => null,
-                'restreint' => $data['restreint'],
-                'valide' => $data['valide'],
+                'restreint' => false,
+                'valide' => true,
                 'url' => $data['url'],
                 'user_id' => User::inRandomOrder()->first()->id,
                 'article_categorie_id' => $data['categorie'],

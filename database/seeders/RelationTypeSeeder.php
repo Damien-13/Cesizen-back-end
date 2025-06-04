@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\RelationType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RelationTypeSeeder extends Seeder
@@ -14,17 +13,15 @@ class RelationTypeSeeder extends Seeder
     public function run(): void
     {
         $relationTypes = [
-            ['lib_relation_type' => 'Amitié', 'visible' => true],
-            ['lib_relation_type' => 'Parent-Enfant', 'visible' => true],
-            ['lib_relation_type' => 'Fratrie', 'visible' => true],
-            ['lib_relation_type' => 'Relation amoureuse', 'visible' => true],
-            ['lib_relation_type' => 'Couple', 'visible' => true],
-            ['lib_relation_type' => 'Colocataire', 'visible' => true],
+            ['lib_relation_type' => 'En couple', 'visible' => true],
+            ['lib_relation_type' => 'Vie de famille', 'visible' => true], // inclut parent/enfant, fratrie, etc.
+            ['lib_relation_type' => 'Entre collègues', 'visible' => true],
+            ['lib_relation_type' => 'Avec son supérieur hiérarchique', 'visible' => true],
+            ['lib_relation_type' => 'À l’école ou en formation', 'visible' => true],
+            ['lib_relation_type' => 'Avec un professionnel de santé', 'visible' => true],
             ['lib_relation_type' => 'Voisinage', 'visible' => true],
-            ['lib_relation_type' => 'Aidant familial', 'visible' => true],
-            ['lib_relation_type' => 'Enseignant·e ou formateur·rice', 'visible' => true],
-            ['lib_relation_type' => 'Professionnel de santé', 'visible' => true],
-            ['lib_relation_type' => 'Accompagnant social', 'visible' => true],
+            ['lib_relation_type' => 'Aidant et aidé·e', 'visible' => true],
+            ['lib_relation_type' => 'Dans l’espace public', 'visible' => true],
         ];
 
         foreach ($relationTypes as $relationType) {
