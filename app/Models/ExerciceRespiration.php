@@ -18,6 +18,10 @@ class ExerciceRespiration extends Model
     // Si la clé primaire est auto-incrémentée
     public $incrementing = true;
 
+    // Pas de timestamps sur cette table
+    public $timestamps = false;
+
+
     // Type de la clé primaire
     protected $keyType = 'int';
 
