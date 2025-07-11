@@ -31,6 +31,9 @@ jobs:
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v3
+        
+      - name: Start services with Docker Compose
+        run: docker-compose up -d
 
       - name: Configurer PHP, Composer et extensions
         uses: shivammathur/setup-php@v2
