@@ -1,27 +1,24 @@
-# Étape 1 : image PHP officielle avec extensions utiles
 FROM php:8.2-cli
 
-# Étape 2 : Installer les dépendances système
+# Installer dépendances système
 RUN apt-get update && apt-get install -y \
-    zip unzip curl libzip-dev libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    zip unzip git curl libzip-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo pdo_mysql
 
+# Installer Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Étape 3 : Installer Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Étape 4 : Créer le dossier de travail
+# Dossier de travail
 WORKDIR /var/www
 
-# Étape 5 : Copier le code de l'app dans le conteneur
+# Copier tous les fichiers
 COPY . .
 
-# Étape 6 : Installer les dépendances Laravel
-RUN composer install
+# Installer les dépendances Laravel
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Étape 7 : Donner les bons droits
-RUN chmod -R 755 /var/www && chown -R www-data:www-data /var/www
-
-# Étape 8 : Lancer le serveur Laravel (port 8000)
+# Exposer le port Laravel
 EXPOSE 8000
+
+# Lancer le serveur Laravel
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
