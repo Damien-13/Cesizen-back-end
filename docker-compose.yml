@@ -9,10 +9,10 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - db
+      - mysql
 
 
-  db:
+  mysql:
     image: mysql:8.0
     container_name: cesizen-db
     ports:
