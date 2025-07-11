@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  front:
+    build: ./CesiZen-Front-end
+    ports:
+      - "5173:5173"
+    container_name: cesizen-front
+    command: npm run dev -- --host
+    depends_on:
+      - back
+
+  back:
+    build: ./Cesizen-back-end
+    ports:
+      - "8000:8000"
+    container_name: cesizen-back
+    env_file:
+      - ./Cesizen-back-end/docker.env
+    depends_on:
+      - db
+
+
+  db:
+    image: mysql:8.0
+    container_name: cesizen-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cesizen
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
