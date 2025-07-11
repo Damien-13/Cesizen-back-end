@@ -16,7 +16,7 @@ services:
       - "8000:8000"
     container_name: cesizen-back
     env_file:
-      - ./Cesizen-back-end/docker.env
+      - ./.env
     depends_on:
       - db
 
