@@ -31,6 +31,9 @@ jobs:
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v3
+        
+      - name: Start services with Docker Compose
+        run: docker-compose up -d
 
       - name: Configurer PHP, Composer et extensions
         uses: shivammathur/setup-php@v2
@@ -46,8 +49,15 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Attendre que MySQL soit prêt
-        run: sleep 15
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..15}; do
+            if mysqladmin ping -h 127.0.0.1 -u laravel -plaravel --silent; then
+              break
+            fi
+            echo "Waiting for MySQL..."
+            sleep 3
+          done
 
       - name: Lancer les migrations avec seed
         run: php artisan migrate --seed
