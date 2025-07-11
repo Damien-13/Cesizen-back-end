@@ -50,8 +50,8 @@ jobs:
       - name: Attendre que MySQL soit prêt
         run: |
           for i in {1..15}; do
-            if mysqladmin ping -h db -u laravel -plaravel --silent; then
-              echo "MySQL is ready"
+            if mysqladmin ping -h 127.0.0.1 -u laravel -plaravel --silent; then
+              echo "db is ready"
               break
             fi
             echo "Waiting for MySQL..."
