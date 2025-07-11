@@ -20,8 +20,10 @@ jobs:
           MYSQL_DATABASE: cesizen
           MYSQL_USER: laravel
           MYSQL_PASSWORD: laravel
+        ports:
+          - 33306:3306  # Changement du port hôte pour éviter les conflits
         options: >-
-          --health-cmd="mysqladmin ping -h localhost"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u laravel -plaravel"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -36,34 +38,27 @@ jobs:
           php-version: '8.2'
           extensions: pdo, pdo_mysql, mbstring
 
-      - name: Créer le fichier .env
+      - name: Installer les dépendances Composer
+        run: composer install --no-progress --prefer-dist
+
+      - name: Créer le fichier .env et générer la clé
         run: |
           cp .env.example .env
-          sed -i 's/DB_HOST=.*/DB_HOST=mysql/' .env
           php artisan key:generate
-
-      - name: Installer les dépendances
-        run: composer install --no-progress --no-suggest --prefer-dist
 
       - name: Attendre que MySQL soit prêt
         run: |
           for i in {1..15}; do
-            if mysqladmin ping -h mysql -u laravel -plaravel --silent; then
+            if mysqladmin ping -h 127.0.0.1 -u laravel -plaravel --silent; then
+              echo "MySQL is ready"
               break
             fi
-            echo "En attente de MySQL..."
-            sleep 3
+            echo "Waiting for MySQL..."
+            sleep 4
           done
 
       - name: Lancer les migrations avec seed
         run: php artisan migrate --seed
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: mysql
-          DB_PORT: 3306
-          DB_DATABASE: cesizen
-          DB_USERNAME: laravel
-          DB_PASSWORD: laravel
 
-      - name: Lancer les tests (si tu en as)
+      - name: Lancer les tests (si définis)
         run: php artisan test || echo "Pas de tests définis"
