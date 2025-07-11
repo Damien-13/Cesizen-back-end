@@ -1,0 +1,38 @@
+name: CD - Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploiement Laravel + MySQL (Docker)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cloner le dépôt
+        uses: actions/checkout@v3
+
+      - name: Installer Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Créer le fichier .env
+        run: |
+          cp .env.example .env
+
+      - name: Construire et lancer les conteneurs
+        run: |
+          docker compose -f docker-compose.yml up -d --build
+
+      - name: Attendre que MySQL soit prêt
+        run: |
+          sleep 20
+
+      - name: Migrer la base de données
+        run: |
+          docker exec cesizen-back php artisan migrate --force
+
+      - name: Tester que l'application répond
+        run: |
+          curl --fail http://localhost:8000 || exit 1
