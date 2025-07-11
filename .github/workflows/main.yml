@@ -37,6 +37,11 @@ jobs:
         with:
           php-version: '8.2'
           extensions: pdo, pdo_mysql, mbstring
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose version
 
       - name: Installer les dépendances
         run: composer install --no-progress --no-suggest --prefer-dist
