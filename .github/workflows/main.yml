@@ -2,11 +2,9 @@ name: CI Laravel
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   laravel-tests:
@@ -15,13 +13,13 @@ jobs:
     services:
       mysql:
         image: mysql:8.0
+        ports:
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: cesizen
           MYSQL_USER: laravel
           MYSQL_PASSWORD: laravel
-        ports:
-          - 33306:3306  # Changement du port hôte pour éviter les conflits
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -u laravel -plaravel"
           --health-interval=10s
@@ -32,35 +30,33 @@ jobs:
       - name: Récupérer le code
         uses: actions/checkout@v3
 
-      - name: Configurer PHP, Composer et extensions
+      - name: Configurer PHP et Composer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: 8.2
           extensions: pdo, pdo_mysql, mbstring
 
-      - name: Installer les dépendances Composer
+      - name: Installer les dépendances PHP
         run: composer install --no-progress --prefer-dist
 
-      - name: Créer le fichier .env et générer la clé
+      - name: Préparer le fichier .env
         run: |
           cp .env.example .env
-          sed -i 's/DB_HOST=.*/DB_HOST=mysql/' .env
           php artisan key:generate
 
       - name: Attendre que MySQL soit prêt
         run: |
           for i in {1..15}; do
-            if mysqladmin ping -h mysql -u laravel -plaravel --silent; then
-              echo "mysql is ready"
+            if mysqladmin ping -h 127.0.0.1 -u laravel -plaravel --silent; then
+              echo "MySQL est prêt"
               break
             fi
-            echo "Waiting for MySQL..."
+            echo "⏳ En attente de MySQL..."
             sleep 4
           done
 
-
-      - name: Lancer les migrations avec seed
+      - name: Lancer les migrations
         run: php artisan migrate --seed
 
-      - name: Lancer les tests (si définis)
+      - name: Lancer les tests
         run: php artisan test || echo "Pas de tests définis"
