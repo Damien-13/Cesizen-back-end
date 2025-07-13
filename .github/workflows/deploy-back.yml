@@ -44,6 +44,12 @@ jobs:
               sleep 2
             done
 
-      - name: Tester que l'application répond
+      - name: Tester Laravel depuis un conteneur
         run: |
-          curl --fail http://localhost:8000 || exit 1
+          docker run --rm --network=cesinet curlimages/curl:latest curl --fail http://cesizen-back:8000
+
+          
+      - name: Afficher les logs Laravel après échec
+        if: failure()
+        run: docker exec cesizen-back cat storage/logs/laravel.log || echo "Pas de log Laravel"
+
