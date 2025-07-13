@@ -36,8 +36,13 @@ jobs:
       - name: Exécuter les seeders
         run: docker exec cesizen-back php artisan db:seed --force
       
-      - name: Logs Laravel
-        run: docker exec cesizen-back tail -n 100 storage/logs/laravel.log
+      - name: Attendre que Laravel soit prêt
+        run: |
+            for i in {1..30}; do
+              curl --silent http://localhost:8000 > /dev/null && break
+              echo "Attente de Laravel..."
+              sleep 2
+            done
 
       - name: Tester que l'application répond
         run: |
