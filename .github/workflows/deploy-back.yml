@@ -20,6 +20,8 @@ jobs:
       - name: Créer le fichier .env
         run: |
           cp .env.example .env
+      - name: Générer la clé Laravel
+        run: docker exec cesizen-back php artisan key:generate
 
       - name: Construire et lancer les conteneurs
         run: |
