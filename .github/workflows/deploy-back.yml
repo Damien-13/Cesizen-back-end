@@ -1,4 +1,4 @@
-name: CD - Deploy Backend
+name: CD - Deploy Backend (Local)
 
 on:
   push:
@@ -7,51 +7,39 @@ on:
 
 jobs:
   deploy:
-    name: Deploiement Laravel + MySQL (Docker)
-    runs-on: ubuntu-latest
+    name: Déploiement local Laravel + MySQL
+    runs-on: self-hosted
 
     steps:
       - name: Cloner le dépôt
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Installer Docker
-        uses: docker/setup-buildx-action@v3
+      - name: Copier le fichier .env
+        run: cp .env.example .env
 
-      - name: Créer le fichier .env
-        run: |
-          cp .env.example .env
-      
-      - name: Construire et lancer les conteneurs
-        run: |
-          docker compose -f docker-compose.yml up -d --build
+      - name: Lancer les conteneurs Docker
+        run: docker compose up -d --build
 
-      - name: Attendre que MySQL soit prêt
-        run: |
-          sleep 20
+      - name: Attendre MySQL
+        run: sleep 15
+
       - name: Générer la clé Laravel
         run: docker exec cesizen-back php artisan key:generate
 
-      - name: Migrer la base de données
-        run: |
-          docker exec cesizen-back php artisan migrate --force
+      - name: Lancer les migrations
+        run: docker exec cesizen-back php artisan migrate --force
 
-      - name: Exécuter les seeders
+      - name: Lancer les seeders
         run: docker exec cesizen-back php artisan db:seed --force
-      
-      - name: Attendre que Laravel soit prêt
-        run: |
-            for i in {1..30}; do
-              curl --silent http://localhost:8000 > /dev/null && break
-              echo "Attente de Laravel..."
-              sleep 2
-            done
 
-      - name: Tester Laravel depuis un conteneur
+      - name: Tester si Laravel répond
         run: |
-          docker-compose exec back curl --fail http://localhost:8000
+          for i in {1..10}; do
+            curl --silent http://localhost:8000 > /dev/null && break
+            echo "Laravel pas encore prêt..."
+            sleep 2
+          done
 
-          
-      - name: Afficher les logs Laravel après échec. 
+      - name: Afficher les logs Laravel en cas d'erreur
         if: failure()
-        run: docker exec cesizen-back cat storage/logs/laravel.log || echo "Pas de log Laravel"
-
+        run: docker exec cesizen-back cat storage/logs/laravel.log || echo "Aucun log Laravel trouvé"
