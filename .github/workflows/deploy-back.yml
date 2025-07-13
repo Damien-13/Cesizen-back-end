@@ -37,7 +37,7 @@ jobs:
         run: docker exec cesizen-back php artisan db:seed --force
       
       - name: Logs Laravel
-        run: docker exec backend tail -n 100 storage/logs/laravel.log
+        run: docker exec cesizen-back tail -n 100 storage/logs/laravel.log
 
       - name: Tester que l'application répond
         run: |
