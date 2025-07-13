@@ -60,3 +60,38 @@ jobs:
 
       - name: Lancer les tests
         run: php artisan test || echo "Pas de tests définis"
+  deploy:
+      needs: laravel-tests
+      runs-on: self-hosted
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+      steps:
+        - name: Cloner le dépôt
+          uses: actions/checkout@v3
+
+        - name: Copier .env
+          run: cp .env.example .env
+
+        - name: Docker Up
+          run: docker compose -f docker-compose.yml up -d --build
+
+        - name: Laravel key
+          run: docker exec cesizen-back php artisan key:generate
+
+        - name: Migrations
+          run: docker exec cesizen-back php artisan migrate --force
+
+        - name: Seeder
+          run: docker exec cesizen-back php artisan db:seed --force
+
+        - name: Health check
+          run: |
+            for i in {1..30}; do
+              curl --silent http://localhost:8000 > /dev/null && break
+              echo "Attente de Laravel..."
+              sleep 2
+            done
+
+        - name: Voir les logs Laravel si erreur
+          if: failure()
+          run: docker exec cesizen-back cat storage/logs/laravel.log || echo "Pas de log Laravel"
