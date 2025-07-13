@@ -72,8 +72,11 @@ jobs:
         - name: Copier .env
           run: cp .env.example .env
 
+        - name: Nettoyage des anciens conteneurs
+          run: docker compose down || true
+          
         - name: Docker Up
-          run: docker compose -f docker-compose.yml up -d --build
+          run: docker compose -f docker-compose.yml up -d --build --force-recreate
 
         - name: Laravel key
           run: docker exec cesizen-back php artisan key:generate
