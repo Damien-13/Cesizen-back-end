@@ -48,7 +48,7 @@ jobs:
 
       - name: Tester Laravel depuis un conteneur
         run: |
-          docker run --rm --network=cesinet curlimages/curl:latest curl --fail http://cesizen-back:8000
+          docker-compose exec back curl --fail http://localhost:8000
 
           
       - name: Afficher les logs Laravel après échec. 
