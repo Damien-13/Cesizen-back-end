@@ -51,7 +51,7 @@ jobs:
           docker run --rm --network=cesinet curlimages/curl:latest curl --fail http://cesizen-back:8000
 
           
-      - name: Afficher les logs Laravel après échec
+      - name: Afficher les logs Laravel après échec. 
         if: failure()
         run: docker exec cesizen-back cat storage/logs/laravel.log || echo "Pas de log Laravel"
 
