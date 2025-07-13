@@ -20,9 +20,7 @@ jobs:
       - name: Créer le fichier .env
         run: |
           cp .env.example .env
-      - name: Générer la clé Laravel
-        run: docker exec cesizen-back php artisan key:generate
-
+      
       - name: Construire et lancer les conteneurs
         run: |
           docker compose -f docker-compose.yml up -d --build
@@ -30,6 +28,8 @@ jobs:
       - name: Attendre que MySQL soit prêt
         run: |
           sleep 20
+      - name: Générer la clé Laravel
+        run: docker exec cesizen-back php artisan key:generate
 
       - name: Migrer la base de données
         run: |
