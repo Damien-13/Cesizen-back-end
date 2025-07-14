@@ -29,8 +29,8 @@ Cette API gère :
 
 ### 🐳 Installation avec Docker (recommandé)
 
-```bash
-cp .env.example .env
-docker-compose up -d --build
-docker exec -it app php artisan key:generate
-docker exec -it app php artisan migrate
+#```bash
+#cp .env.example .env
+#docker-compose up -d --build
+#docker exec -it app php artisan key:generate
+#docker exec -it app php artisan migrate
