@@ -80,6 +80,10 @@ jobs:
 
         - name: Laravel key
           run: docker exec cesizen-back php artisan key:generate
+        - name: Wait for MySQL to be ready
+          run: |
+            docker run --network=cesinet --rm mysql:8 \
+            bash -c 'until mysql -hdb -ularavel -plaravel -e "SELECT 1"; do sleep 1; done'
 
         - name: Migrations
           run: docker exec cesizen-back php artisan migrate --force
