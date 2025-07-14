@@ -72,9 +72,12 @@ jobs:
         - name: Copier .env
           run: cp .env.example .env
 
+        - name: Adapter le .env pour Docker
+          run: sed -i 's/DB_HOST=.*/DB_HOST=mysql/' .env
+
         - name: Nettoyage des anciens conteneurs
           run: docker compose down || true
-          
+
         - name: Docker Up
           run: docker compose -f docker-compose.yml up -d --build --force-recreate
 
