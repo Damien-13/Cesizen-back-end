@@ -4,7 +4,7 @@ Ce dépôt contient le **back-end de l’application CESIZen**, développé avec
 
 CESIZen est un projet scolaire réalisé dans le cadre de la formation **Concepteur Développeur d’Applications (CDA)**. L’objectif est de proposer une plateforme autour de la **santé mentale** et de la **gestion du stress**, avec une attention particulière à la sécurité des données sensibles.
 
----
+--
 
 ## 🔗 Modules disponibles
 
