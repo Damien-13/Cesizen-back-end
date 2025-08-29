@@ -88,8 +88,8 @@ jobs:
         - name: Migrations
           run: docker exec cesizen-back php artisan migrate --force
 
-        - name: Seeder
-          run: docker exec cesizen-back php artisan db:seed --force
+        #- name: Seeder
+        #  run: docker exec cesizen-back php artisan db:seed --force
 
         - name: Health check
           run: |
