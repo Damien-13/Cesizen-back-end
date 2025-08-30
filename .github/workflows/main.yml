@@ -1,4 +1,4 @@
-name: CI Laravel
+name: CICD Laravel
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   laravel-tests:
+    name: Tests
     runs-on: ubuntu-latest
 
     services:
@@ -28,12 +29,12 @@ jobs:
 
     steps:
       - name: Récupérer le code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configurer PHP et Composer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: '8.2'
           extensions: pdo, pdo_mysql, mbstring
 
       - name: Installer les dépendances PHP
@@ -48,11 +49,8 @@ jobs:
         run: |
           for i in {1..15}; do
             if mysqladmin ping -h 127.0.0.1 -u laravel -plaravel --silent; then
-              echo "MySQL est prêt"
-              break
-            fi
-            echo "⏳ En attente de MySQL..."
-            sleep 4
+              echo "MySQL est prêt"; break; fi
+            echo "⏳ En attente de MySQL..."; sleep 4
           done
 
       - name: Lancer les migrations
@@ -62,94 +60,88 @@ jobs:
         run: php artisan test || echo "Pas de tests définis"
 
   security-laravel:
-        name: Security checks (Laravel)
-        runs-on: ubuntu-latest   # Linux requis pour l'action Semgrep
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
+    name: Security checks (Laravel)
+    needs: laravel-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-          - name: Setup PHP
-            uses: shivammathur/setup-php@v2
-            with:
-              php-version: '8.2'
-              coverage: none
-              tools: composer
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer
 
-          - name: Install PHP deps (no dev)
-            run: composer install --no-interaction --no-progress --prefer-dist --no-dev
+      - name: Install PHP deps (no dev)
+        run: composer install --no-interaction --no-progress --prefer-dist --no-dev
 
-          # 1) Dépendances PHP – source officielle Composer
-          - name: Composer audit (fail on HIGH+)
-            run: composer audit --no-dev
+      - name: Composer audit (fail on HIGH+)
+        run: composer audit --no-dev
 
-          # 2) Dépendances PHP – checker alternatif (croisement)
-          - name: Local PHP Security Checker
-            run: |
-              curl -sSL https://github.com/fabpot/local-php-security-checker/releases/latest/download/local-php-security-checker_linux_amd64 \
-                -o /usr/local/bin/local-php-security-checker
-              chmod +x /usr/local/bin/local-php-security-checker
-              local-php-security-checker --no-dev --format=text
+      - name: Local PHP Security Checker
+        run: |
+          curl -sSL https://github.com/fabpot/local-php-security-checker/releases/latest/download/local-php-security-checker_linux_amd64 -o /usr/local/bin/local-php-security-checker
+          chmod +x /usr/local/bin/local-php-security-checker
+          local-php-security-checker --no-dev --format=text
 
-          # 3) Secrets
-          - name: Gitleaks
-            uses: gitleaks/gitleaks-action@v2
-            with:
-              args: --redact
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: --redact
 
-          # 4) SAST PHP (OWASP Top 10)
-          - name: Semgrep (PHP)
-            uses: returntocorp/semgrep-action@v1
-            with:
-              config: p/php,p/owasp-top-ten
+      - name: Semgrep (PHP)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: p/php,p/owasp-top-ten
 
-          # 5) Vulns & misconfigs dans le repo / Dockerfile
-          - name: Trivy FS scan
-            uses: aquasecurity/trivy-action@0.20.0
-            with:
-              scan-type: fs
-              ignore-unfixed: true
-              severity: CRITICAL,HIGH
-              exit-code: '1'
+      - name: Trivy FS scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: fs
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+          exit-code: '1'
 
   deploy:
-      needs: laravel-tests
-      runs-on: self-hosted
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    name: Déploiement
+    needs: [laravel-tests, security-laravel]
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Cloner le dépôt
+        uses: actions/checkout@v4
 
-      steps:
-        - name: Cloner le dépôt
-          uses: actions/checkout@v3
+      - name: Copier .env
+        run: cp .env.docker.example .env
 
-        - name: Copier .env
-          run: cp .env.docker.example .env
+      - name: Nettoyage des anciens conteneurs
+        run: docker compose down || true
 
-        - name: Nettoyage des anciens conteneurs
-          run: docker compose down || true
+      - name: Docker Up
+        run: docker compose -f docker-compose.yml up -d --build --force-recreate
 
-        - name: Docker Up
-          run: docker compose -f docker-compose.yml up -d --build --force-recreate
+      - name: Laravel key
+        run: docker exec cesizen-back php artisan key:generate
 
-        - name: Laravel key
-          run: docker exec cesizen-back php artisan key:generate
+      - name: Wait for MySQL to be ready
+        run: |
+          docker exec cesizen-db bash -c 'until mysql -h 127.0.0.1 -u laravel -plaravel -e "SELECT 1"; do echo "Waiting for MySQL..."; sleep 2; done'
 
-        - name: Wait for MySQL to be ready
-          run: |
-            docker exec cesizen-db bash -c 'until mysql -h 127.0.0.1 -u laravel -plaravel -e "SELECT 1"; do echo "Waiting for MySQL..."; sleep 2; done'
+      - name: Migrations
+        run: docker exec cesizen-back php artisan migrate --force
 
-        - name: Migrations
-          run: docker exec cesizen-back php artisan migrate --force
+      # - name: Seeder
+      #   run: docker exec cesizen-back php artisan db:seed --force
 
-        #- name: Seeder
-        #  run: docker exec cesizen-back php artisan db:seed --force
+      - name: Health check
+        run: |
+          for i in {1..30}; do
+            curl --silent http://localhost:8000 > /dev/null && break
+            echo "Attente de Laravel..."; sleep 2
+          done
 
-        - name: Health check
-          run: |
-            for i in {1..30}; do
-              curl --silent http://localhost:8000 > /dev/null && break
-              echo "Attente de Laravel..."
-              sleep 2
-            done
-
-        - name: Voir les logs Laravel si erreur
-          if: failure()
-          run: docker exec cesizen-back cat storage/logs/laravel.log || echo "Pas de log Laravel"
+      - name: Voir les logs Laravel si erreur
+        if: failure()
+        run: docker exec cesizen-back cat storage/logs/laravel.log || echo "Pas de log Laravel"
