@@ -60,6 +60,59 @@ jobs:
 
       - name: Lancer les tests
         run: php artisan test || echo "Pas de tests définis"
+
+
+security-laravel:
+    name: Security checks (Laravel)
+    runs-on: ubuntu-latest   # Linux requis pour l'action Semgrep
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer
+
+      - name: Install PHP deps (no dev)
+        run: composer install --no-interaction --no-progress --prefer-dist --no-dev
+
+      # 1) Dépendances PHP – source officielle Composer
+      - name: Composer audit (fail on HIGH+)
+        run: composer audit --no-dev
+
+      # 2) Dépendances PHP – checker alternatif (croisement)
+      - name: Local PHP Security Checker
+        run: |
+          curl -sSL https://github.com/fabpot/local-php-security-checker/releases/latest/download/local-php-security-checker_linux_amd64 \
+            -o /usr/local/bin/local-php-security-checker
+          chmod +x /usr/local/bin/local-php-security-checker
+          local-php-security-checker --no-dev --format=text
+
+      # 3) Secrets
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: --redact
+
+      # 4) SAST PHP (OWASP Top 10)
+      - name: Semgrep (PHP)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: p/php,p/owasp-top-ten
+
+      # 5) Vulns & misconfigs dans le repo / Dockerfile
+      - name: Trivy FS scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: fs
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+          exit-code: '1'
+          
+
   deploy:
       needs: laravel-tests
       runs-on: self-hosted
